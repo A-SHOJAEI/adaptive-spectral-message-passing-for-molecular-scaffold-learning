@@ -1,0 +1,85 @@
+# Ablation study: Baseline without adaptive spectral filters and curriculum learning
+
+# Model architecture (same base architecture)
+model:
+  hidden_dim: 128
+  num_spectral_filters: 8
+  num_layers: 4
+  dropout: 0.2
+  spectral_dropout: 0.1
+  use_batch_norm: true
+  aggregation: "mean"
+  readout: "mean"
+
+# Spectral graph convolution settings (DISABLED adaptive features)
+spectral:
+  num_frequencies: 16
+  adaptive_filter: false  # ABLATION: Disable adaptive filtering
+  frequency_decay: 0.9
+  learnable_eigenvalues: false  # ABLATION: Fixed eigenvalues
+  normalize_laplacian: true
+
+# Scaffold curriculum learning (DISABLED)
+curriculum:
+  enabled: false  # ABLATION: No curriculum learning
+  start_epoch: 0
+  warmup_epochs: 5
+  sort_by_complexity: false
+  complexity_metric: "num_rings"
+  pacing_function: "linear"
+  max_difficulty_increase: 0.1
+
+# Training (same settings)
+training:
+  batch_size: 32
+  num_epochs: 100
+  learning_rate: 0.001
+  weight_decay: 0.00001
+  grad_clip: 1.0
+  early_stopping_patience: 15
+  min_delta: 0.0001
+
+# Learning rate scheduling
+scheduler:
+  type: "cosine"
+  warmup_epochs: 5
+  min_lr: 0.00001
+  T_max: 100
+
+# Data
+data:
+  dataset: "BBBP"
+  split_type: "scaffold"
+  train_ratio: 0.8
+  val_ratio: 0.1
+  test_ratio: 0.1
+  num_workers: 4
+  pin_memory: true
+
+# Optimization
+optimizer:
+  type: "adam"
+  betas: [0.9, 0.999]
+  eps: 0.00000001
+
+# Regularization (REDUCED - no custom losses)
+regularization:
+  spectral_smoothness_weight: 0.0  # ABLATION: Disable spectral regularization
+  scaffold_consistency_weight: 0.0  # ABLATION: Disable scaffold regularization
+  filter_diversity_weight: 0.0  # ABLATION: Disable filter diversity
+
+# Logging and checkpointing
+logging:
+  log_interval: 10
+  val_interval: 1
+  checkpoint_dir: "checkpoints_ablation"
+  results_dir: "results_ablation"
+  save_best_only: true
+  save_last: true
+
+# Reproducibility
+seed: 42
+
+# Device
+device: "cuda"
+mixed_precision: true

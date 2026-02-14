@@ -1,0 +1,73 @@
+# Quick test configuration for fast training (generates results for README)
+
+model:
+  hidden_dim: 64
+  num_spectral_filters: 4
+  num_layers: 3
+  dropout: 0.2
+  spectral_dropout: 0.1
+  use_batch_norm: true
+  aggregation: "mean"
+  readout: "mean"
+
+spectral:
+  num_frequencies: 8
+  adaptive_filter: true
+  frequency_decay: 0.9
+  learnable_eigenvalues: true
+  normalize_laplacian: true
+
+curriculum:
+  enabled: true
+  start_epoch: 0
+  warmup_epochs: 2
+  sort_by_complexity: true
+  complexity_metric: "num_rings"
+  pacing_function: "linear"
+  max_difficulty_increase: 0.1
+
+training:
+  batch_size: 64
+  num_epochs: 10
+  learning_rate: 0.001
+  weight_decay: 0.00001
+  grad_clip: 1.0
+  early_stopping_patience: 5
+  min_delta: 0.0001
+
+scheduler:
+  type: "cosine"
+  warmup_epochs: 2
+  min_lr: 0.00001
+  T_max: 10
+
+data:
+  dataset: "BBBP"
+  split_type: "scaffold"
+  train_ratio: 0.8
+  val_ratio: 0.1
+  test_ratio: 0.1
+  num_workers: 0
+  pin_memory: true
+
+optimizer:
+  type: "adam"
+  betas: [0.9, 0.999]
+  eps: 0.00000001
+
+regularization:
+  spectral_smoothness_weight: 0.01
+  scaffold_consistency_weight: 0.05
+  filter_diversity_weight: 0.001
+
+logging:
+  log_interval: 5
+  val_interval: 1
+  checkpoint_dir: "checkpoints_quick"
+  results_dir: "results_quick"
+  save_best_only: true
+  save_last: true
+
+seed: 42
+device: "cuda"
+mixed_precision: true

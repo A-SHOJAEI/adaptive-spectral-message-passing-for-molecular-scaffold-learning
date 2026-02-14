@@ -1,0 +1,85 @@
+# Default configuration for adaptive spectral message passing
+
+# Model architecture
+model:
+  hidden_dim: 128
+  num_spectral_filters: 8
+  num_layers: 4
+  dropout: 0.2
+  spectral_dropout: 0.1
+  use_batch_norm: true
+  aggregation: "mean"
+  readout: "mean"
+
+# Spectral graph convolution settings
+spectral:
+  num_frequencies: 16
+  adaptive_filter: true
+  frequency_decay: 0.9
+  learnable_eigenvalues: true
+  normalize_laplacian: true
+
+# Scaffold curriculum learning
+curriculum:
+  enabled: true
+  start_epoch: 0
+  warmup_epochs: 5
+  sort_by_complexity: true
+  complexity_metric: "num_rings"
+  pacing_function: "linear"
+  max_difficulty_increase: 0.1
+
+# Training
+training:
+  batch_size: 32
+  num_epochs: 100
+  learning_rate: 0.001
+  weight_decay: 0.00001
+  grad_clip: 1.0
+  early_stopping_patience: 15
+  min_delta: 0.0001
+
+# Learning rate scheduling
+scheduler:
+  type: "cosine"
+  warmup_epochs: 5
+  min_lr: 0.00001
+  T_max: 100
+
+# Data
+data:
+  dataset: "BBBP"
+  split_type: "scaffold"
+  train_ratio: 0.8
+  val_ratio: 0.1
+  test_ratio: 0.1
+  num_workers: 0  # Use 0 to avoid multiprocessing issues
+  pin_memory: true
+
+# Optimization
+optimizer:
+  type: "adam"
+  betas: [0.9, 0.999]
+  eps: 0.00000001
+
+# Regularization
+regularization:
+  spectral_smoothness_weight: 0.01
+  scaffold_consistency_weight: 0.05
+  filter_diversity_weight: 0.001
+
+# Logging and checkpointing
+logging:
+  log_interval: 10
+  val_interval: 1
+  checkpoint_dir: "checkpoints"
+  results_dir: "results"
+  save_best_only: true
+  save_last: true
+
+# Reproducibility
+seed: 42
+
+# Device
+device: "cuda"
+mixed_precision: true
