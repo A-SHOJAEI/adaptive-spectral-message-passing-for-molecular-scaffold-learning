@@ -125,22 +125,32 @@ def compute_scaffold_split_metrics(
             labels = data.y.cpu().numpy()
 
             # Group by scaffold
-            if hasattr(data, "scaffold"):
-                scaffold = data.scaffold
-                if scaffold not in scaffold_preds:
-                    scaffold_preds[scaffold] = []
-                    scaffold_labels[scaffold] = []
+            scaffolds = None
+            if hasattr(data, "scaffold_list"):
+                scaffolds = data.scaffold_list
+            elif hasattr(data, "scaffold"):
+                scaffolds = data.scaffold if isinstance(data.scaffold, list) else [data.scaffold]
 
-                scaffold_preds[scaffold].extend(probs)
-                scaffold_labels[scaffold].extend(labels)
+            if scaffolds is not None:
+                for i, scaffold in enumerate(scaffolds):
+                    scaffold_str = str(scaffold)
+                    if scaffold_str not in scaffold_preds:
+                        scaffold_preds[scaffold_str] = []
+                        scaffold_labels[scaffold_str] = []
+                    if i < len(probs):
+                        scaffold_preds[scaffold_str].append(probs[i])
+                    if i < len(labels):
+                        scaffold_labels[scaffold_str].append(labels[i])
 
     # Compute per-scaffold AUC
     scaffold_aucs = {}
     for scaffold, preds in scaffold_preds.items():
         labels = scaffold_labels[scaffold]
-        if len(set(labels)) > 1:  # Need both classes for AUC
+        labels_flat = np.array(labels).flatten()
+        if len(set(labels_flat.tolist())) > 1:  # Need both classes for AUC
             try:
-                auc = roc_auc_score(labels, preds)
+                preds_flat = np.array(preds).flatten()
+                auc = roc_auc_score(labels_flat, preds_flat)
                 scaffold_aucs[scaffold] = auc
             except Exception:
                 pass

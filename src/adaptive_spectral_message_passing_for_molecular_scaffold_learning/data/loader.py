@@ -4,7 +4,6 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-import deepchem as dc
 import numpy as np
 import torch
 from rdkit import Chem

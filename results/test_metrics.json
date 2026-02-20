@@ -1,0 +1,12 @@
+{
+  "roc_auc": 0.8322777386816795,
+  "pr_auc": 0.9281797402592972,
+  "accuracy": 0.7365853658536585,
+  "precision": 0.911504424778761,
+  "recall": 0.7006802721088435,
+  "f1": 0.7923076923076923,
+  "scaffold_split_auc": 0.2946078431372549,
+  "scaffold_split_auc_std": 0.39063583702768373,
+  "num_scaffolds": 6,
+  "spectral_alignment_score": 1.9985386689112894
+}

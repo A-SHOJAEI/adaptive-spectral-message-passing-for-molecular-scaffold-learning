@@ -56,14 +56,10 @@ models/*.pt
 checkpoints/*.pth
 checkpoints/*.pt
 
-# Logs and results
+# Logs
 logs/
 mlruns/
 *.log
-results/*.json
-results/*.csv
-results/*.png
-results/*.pdf
 
 # OS
 .DS_Store
