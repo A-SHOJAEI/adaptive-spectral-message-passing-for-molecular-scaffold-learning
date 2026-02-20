@@ -1,0 +1,23 @@
+{
+  "project": "Adaptive Spectral Message Passing for Molecular Scaffold Learning",
+  "dataset": "BBBP (MoleculeNet, 2039 molecules, scaffold split)",
+  "model": "Adaptive Spectral Graph Convolution Network",
+  "training": {
+    "num_epochs": 100,
+    "batch_size": 32,
+    "learning_rate": 0.001,
+    "early_stopping_patience": 15
+  },
+  "metrics": {
+    "roc_auc": 0.8323,
+    "pr_auc": 0.9282,
+    "accuracy": 0.7366,
+    "precision": 0.9115,
+    "recall": 0.7007,
+    "f1": 0.7923,
+    "scaffold_split_auc": 0.2946,
+    "scaffold_split_auc_std": 0.3906,
+    "num_scaffolds": 6,
+    "spectral_alignment_score": 1.9985
+  }
+}
